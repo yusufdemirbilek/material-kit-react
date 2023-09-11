@@ -18,7 +18,7 @@ export default function App() {
           <ScrollToTop />
           <StyledChart />
           <Router />
-        </ThemeProvider>
+        </ThemeProvider>  
       </BrowserRouter>
     </HelmetProvider>
   );
