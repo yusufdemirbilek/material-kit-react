@@ -1,6 +1,13 @@
 import { Helmet } from 'react-helmet-async';
+import { useState } from 'react';
 // @mui
-import { Grid, Button, Container, Stack, Typography } from '@mui/material';
+import {  Container, Stack, Typography,Grid,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  OutlinedInput, } from '@mui/material';
 // components
 import { useTheme } from '@mui/material/styles';
 import Iconify from '../components/iconify';
@@ -30,9 +37,38 @@ const SORT_OPTIONS = [
 
 // ----------------------------------------------------------------------
 
-export default function BlogPage() {
+const projects = ['Sprint-1', 'Sprint-2', 'Sprint-3', 'Sprint-4', 'Sprint-5', 'Sprint-6'];
+function getStyles(name, personName, theme) {
+  return {
+    fontWeight:
+      personName.indexOf(name) === -1 ? theme.typography.fontWeightRegular : theme.typography.fontWeightMedium,
+  };
+}
 
+
+export default function BlogPage() {
+  // Düzenlenecek
+  const [openFilter, setOpenFilter] = useState(false);
   const theme = useTheme();
+  const handleOpenFilter = () => {
+    setOpenFilter(true);
+  };
+
+  const handleCloseFilter = () => {
+    setOpenFilter(false);
+  };
+
+  const [projectName, setProjectName] = useState([]);
+
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setProjectName(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value
+    );
+  };
   return (
     <>
       <Helmet>
@@ -42,12 +78,34 @@ export default function BlogPage() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Çalışanlar
+            Sprintler
           </Typography>
           {/* <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
             New Post
           </Button> */}
         </Stack>
+
+        <FormControl sx={{ m: 0, width: 300 }}>
+          <InputLabel id="demo-multiple-name-label">Sprint Seç</InputLabel>
+          <Select
+            labelId="demo-multiple-name-label"
+            id="demo-multiple-name"
+            multiple
+            value={projectName}
+            onChange={handleChange}
+            input={<OutlinedInput label="Name" />}
+            // MenuProps={MenuProps}
+          >
+            {projects.map((project) => (
+              <MenuItem key={project} value={project} style={getStyles(project, projectName, theme)}>
+                {project}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <div style={{ marginTop: '15px' }}> </div>
+
+
         <Grid item xs={12} md={6} lg={4}>
             <AppCurrentVisits
               title=""
